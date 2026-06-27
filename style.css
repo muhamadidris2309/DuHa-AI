@@ -165,23 +165,24 @@ body{
 /* ========================= */
 
 .input-area{
-    padding:12px;
+    padding:10px;
     background:#fff;
     border-top:1px solid #ddd;
     display:flex;
     align-items:center;
-    gap:10px;
-    flex-shrink:0;
+    gap:8px;
+    width:100%;
 }
 
 .input-area input{
+    width:0;
     flex:1;
-    height:50px;
+    min-width:0;
     border:1px solid #ccc;
     border-radius:30px;
-    padding:0 18px;
-    outline:none;
+    padding:14px 18px;
     font-size:15px;
+    outline:none;
 }
 
 .input-area input:focus{
@@ -189,16 +190,15 @@ body{
 }
 
 .input-area button{
-    width:50px;
-    height:50px;
-    flex-shrink:0;
+    width:48px;
+    height:48px;
+    flex:0 0 48px;
     border:none;
     border-radius:50%;
     background:#15803d;
     color:#fff;
     font-size:20px;
     cursor:pointer;
-    transition:.3s;
 }
 
 .input-area button:hover{
