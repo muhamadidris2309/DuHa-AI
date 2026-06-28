@@ -180,7 +180,7 @@ content: `
 
 {
 title: "STANDAR UMUR PPDB SD",
-keywords: ["umur","usia","minimal umur","syarat umur"],
+keywords: ["umur","usia","minimal umur","syarat umur","perkelas","jumlah siswa ","satu kelas"],
 content: `
 Calon peserta didik SD wajib berusia minimal:
 
