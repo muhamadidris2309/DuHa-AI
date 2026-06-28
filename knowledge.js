@@ -10,7 +10,7 @@ Menciptakan generasi rabbani yang unggul, cinta Al-Qur'an, cerdas (memiliki peng
 
 {
 title: "FASILITAS SEKOLAH",
-keywords: ["fasilitas","gedung","lab","perpustakaan","ac","kelas"],
+keywords: ["fasilitas","gedung","lab","perpustakaan","ac"],
 content: `
 ✅ Sekolah Penggerak Kabupaten Bekasi<br>
 ✅ Sekolah Berprestasi Kategori Kinerja Terbaik<br>
