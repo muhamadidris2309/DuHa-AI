@@ -1,378 +1,203 @@
 const input = document.getElementById("userInput");
 const chatBox = document.getElementById("chatBox");
 
-// =========================
 // ENTER
-// =========================
-
-input.addEventListener("keydown", function(e){
-
-    if(e.key==="Enter"){
-
+input.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
         sendMessage();
-
     }
-
 });
 
-// =========================
-
-function getTime(){
-
+// JAM
+function getTime() {
     const now = new Date();
 
-    return now.getHours().toString().padStart(2,"0")
-    + ":"
-    + now.getMinutes().toString().padStart(2,"0");
-
+    return (
+        now.getHours().toString().padStart(2, "0") +
+        ":" +
+        now.getMinutes().toString().padStart(2, "0")
+    );
 }
 
-// =========================
+// TAMBAH PESAN
+function addMessage(sender, message) {
 
-function addMessage(sender,message){
+    const wrapper = document.createElement("div");
 
-    const wrapper=document.createElement("div");
+    wrapper.className = sender;
 
-    wrapper.className=sender;
-
-    wrapper.innerHTML=`
-
+    wrapper.innerHTML = `
         <div class="bubble">
-
             ${message}
-
         </div>
 
         <div class="time">
-
             ${getTime()}
-
         </div>
-
     `;
 
     chatBox.appendChild(wrapper);
 
-    chatBox.scrollTop=chatBox.scrollHeight;
-
+    chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-// =========================
+// KIRIM PESAN
+function sendMessage() {
 
-function sendMessage(){
+    const text = input.value.trim();
 
-    const text=input.value.trim();
+    if (!text) return;
 
-    if(text==="") return;
+    addMessage("user", text);
 
-    addMessage("user",text);
+    input.value = "";
 
-    input.value="";
-
-    setTimeout(()=>{
-
-        typing(text.toLowerCase());
-
-    },500);
-
+    showTyping(text);
 }
 
-// =========================
+// TYPING
+function showTyping(message) {
 
-function typing(message){
+    const typing = document.createElement("div");
 
-    const wrapper=document.createElement("div");
+    typing.className = "bot";
 
-    wrapper.className="bot";
-
-    wrapper.innerHTML=`
-
+    typing.innerHTML = `
         <div class="bubble">
-
             ✍️ DuHa AI sedang mengetik...
-
         </div>
-
     `;
 
-    chatBox.appendChild(wrapper);
+    chatBox.appendChild(typing);
 
-    chatBox.scrollTop=chatBox.scrollHeight;
+    chatBox.scrollTop = chatBox.scrollHeight;
 
-    setTimeout(()=>{
+    setTimeout(() => {
 
-        wrapper.remove();
+        typing.remove();
 
         botReply(message);
 
-    },1200);
-
+    }, 1000);
 }
 
-// =========================
+// PENCARIAN KNOWLEDGE
+function searchKnowledge(question) {
 
-function botReply(msg){
+    const q = question.toLowerCase();
 
-    let reply="";
+    let bestMatch = null;
 
-    if(msg.includes("halo") || msg.includes("hai") || msg.includes("assalamualaikum")){
+    let highestScore = 0;
 
-        reply=`
-        😊 <b>Wa'alaikumussalam.</b><br><br>
+    knowledge.forEach(item => {
 
-        Selamat datang di Chatbot PPDB SDIT Darul Huffadz.
+        let score = 0;
 
-        Ada yang bisa saya bantu?
-        `;
+        item.keywords.forEach(keyword => {
 
-    }
+            if (q.includes(keyword.toLowerCase())) {
+                score += 10;
+            }
 
-    else if(msg.includes("profil")){
+        });
 
-        reply=`
-        <b>🏫 Profil Sekolah</b><br><br>
+        const fullText =
+            (item.title + " " + item.content).toLowerCase();
 
-        SDIT Darul Huffadz merupakan sekolah Islam terpadu yang berkomitmen mencetak generasi Qur'ani, berakhlak mulia, cerdas, dan berprestasi.
-        `;
+        q.split(" ").forEach(word => {
 
-    }
+            if (
+                word.length > 2 &&
+                fullText.includes(word)
+            ) {
+                score++;
+            }
 
-    else if(msg.includes("visi")){
+        });
 
-        reply=`
-        <b>🎯 Visi & Misi</b><br><br>
+        if (score > highestScore) {
 
-        <b>Visi</b><br>
+            highestScore = score;
 
-        Menjadi sekolah Islam unggulan yang menghasilkan generasi Qur'ani, cerdas, dan berakhlakul karimah.
+            bestMatch = item;
 
-        <br><br>
+        }
 
-        <b>Misi</b>
+    });
 
-        <br>• Menanamkan akhlak Islami
-
-        <br>• Mengembangkan Tahfidz
-
-        <br>• Mengembangkan prestasi akademik
-
-        <br>• Membentuk karakter siswa
-
-        `;
-
-    }
-
-    else if(msg.includes("program")){
-
-        reply=`
-        <b>⭐ Program Unggulan</b>
-
-        <br><br>
-
-        ✔ Tahfidz setiap hari
-
-        <br>
-
-        ✔ Tahsin & BTQ
-
-        <br>
-
-        ✔ IT Coding
-
-        <br>
-
-        ✔ Bahasa Inggris
-
-        <br>
-
-        ✔ LDKS
-
-        <br>
-
-        ✔ Pramuka
-
-        <br>
-
-        ✔ Praktik Lapangan
-
-        `;
-
-    }
-
-    else if(msg.includes("fasilitas")){
-
-        reply=`
-        <b>🏢 Fasilitas</b>
-
-        <br><br>
-
-        • Ruang kelas AC
-
-        <br>
-
-        • Mushola
-
-        <br>
-
-        • UKS
-
-        <br>
-
-        • Perpustakaan
-
-        <br>
-
-        • Kantin
-
-        <br>
-
-        • Pojok Baca
-
-        `;
-
-    }
-
-    else if(
-    msg.includes("biaya") ||
-    msg.includes("harga") ||
-    msg.includes("uang") ||
-    msg.includes("bayar")
-){
-
-    reply = `
-    <b>💰 Informasi Biaya PPDB</b>
-
-    <br><br>
-
-    Silakan lihat rincian biaya PPDB melalui link Google Drive berikut:
-
-    <br><br>
-
-    <a href="https://drive.google.com/file/d/1oDzkS_ZhrVXLeTS6d-L7UO7M5YYCEx0d/view"
-       target="_blank"
-       style="
-       color:#15803d;
-       font-weight:bold;
-       text-decoration:none;
-       ">
-       📄 Lihat Rincian Biaya PPDB
-    </a>
-
-    <br><br>
-
-    Jika ada pertanyaan lebih lanjut silakan hubungi Admin PPDB 😊
-    `;
-}
-    else if(msg.includes("jadwal")){
-
-        reply=`
-        <b>📅 Jadwal PPDB</b>
-
-        <br><br>
-
-        Gelombang II
-
-        <br>
-
-        Februari - April 2026
-
-        `;
-
-    }
-
-    else if(msg.includes("daftar")){
-
-        reply=`
-        <b>📝 Cara Pendaftaran</b>
-
-        <br><br>
-
-        Silakan mengisi formulir PPDB melalui link yang telah disediakan oleh sekolah atau datang langsung ke kantor PPDB.
-        `;
-
-    }
-
-    else if(msg.includes("kontak")){
-
-        reply=`
-        <b>📞 Kontak Admin</b>
-
-        <br><br>
-
-        0852-8596-0616
-
-        <br>
-
-        0877-2100-2669
-
-        `;
-
-    }
-
-    else if(
-    msg.includes("daftar") ||
-    msg.includes("formulir")
-){
-
-    reply=`
-    <b>📝 Formulir PPDB</b>
-
-    <br><br>
-
-    Silakan isi formulir pendaftaran melalui link berikut:
-
-    <br><br>
-
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdNVQjvmYhBVyRs5P5lg_3Qyy7-M8dSgjkJIeiTuszRZ0i2BQ/viewform"
-       target="_blank">
-
-       📋 Isi Formulir PPDB
-
-    </a>
-
-    <br><br>
-
-    Setelah mengisi formulir, Admin akan menghubungi Anda.
-    `;
+    return bestMatch;
 }
 
-    else{
+// BALASAN BOT
+function botReply(message) {
 
-        reply=`
-        😅 Maaf, saya belum memahami pertanyaan tersebut.
+    const msg = message.toLowerCase();
+
+    // SALAM
+
+    if (
+        msg.includes("halo") ||
+        msg.includes("hai") ||
+        msg.includes("assalamualaikum")
+    ) {
+
+        addMessage(
+            "bot",
+            `
+            😊 <b>Wa'alaikumussalam Warahmatullahi Wabarakatuh</b>
+
+            <br><br>
+
+            Selamat datang di layanan informasi PPDB
+            <b>YAYASAN DARUL HUFFADZ</b>.
+
+            `
+        );
+
+        return;
+    }
+
+    // CARI KNOWLEDGE
+
+    const result = searchKnowledge(message);
+
+    if (result) {
+
+        addMessage(
+            "bot",
+            `
+            <b>📚 ${result.title}</b>
+
+            <br><br>
+
+            ${result.content}
+            `
+        );
+
+        return;
+    }
+
+    // JIKA TIDAK KETEMU
+
+    addMessage(
+        "bot",
+        `
+        😅 Maaf, saya belum menemukan informasi tersebut.
 
         <br><br>
 
-        Coba tanyakan mengenai:
+        Coba tanyakan:
 
-        <br>
-
-        • Profil
-
-        <br>
-
-        • Program
-
-        <br>
-
-        • Fasilitas
-
-        <br>
-
-        • Biaya
-
-        <br>
-
-        • Jadwal
-
-        <br>
-
-        • Cara Daftar
-
-        `;
-
-    }
-
-    addMessage("bot",reply);
-
+        <br>🏫 Profil Sekolah
+        <br>⭐ Program Unggulan
+        <br>🏢 Fasilitas
+        <br>🎯 Ekstrakurikuler
+        <br>💰 Biaya
+        <br>📝 Syarat Pendaftaran
+        <br>📋 Formulir
+        <br>📞 Kontak Admin
+        <br>📍 Alamat Sekolah
+        `
+    );
 }
